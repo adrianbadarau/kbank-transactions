@@ -1,0 +1,48 @@
+{
+  "generator-jhipster": {
+    "authenticationType": "jwt",
+    "cacheProvider": "hazelcast",
+    "serverPort": "8082",
+    "serviceDiscoveryType": "eureka",
+    "skipUserManagement": true,
+    "baseName": "transactions",
+    "buildTool": "maven",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableSwaggerCodegen": false,
+    "enableTranslation": true,
+    "jhiPrefix": "jhi",
+    "languages": ["en", "fr"],
+    "messageBroker": false,
+    "nativeLanguage": "en",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "skipClient": true,
+    "testFrameworks": [],
+    "websocket": false,
+    "applicationType": "microservice",
+    "packageName": "com.adrianbadarau.bank.transactions",
+    "packageFolder": "com/adrianbadarau/bank/transactions",
+    "jhipsterVersion": "6.8.0",
+    "creationTimestamp": 1584989520824,
+    "clientPackageManager": "npm",
+    "jwtSecretKey": "YzU0M2RmODFiNzQ0YTE4YzhlMDdkN2I3YjNmZDRjZDJlOGFiOTkwZjhmNDg2NThjYjYwYjUzYWQ4ODg4Mzg4Yjc4OWQyNTBhODhjZjY2ODVlODdmOGE0ZmY2Mjg1OTY3NDUxYTliODNiOTEzNDg5NTNkNGJiNGNhNTU5ZDMwZGQ=",
+    "embeddableLaunchScript": false,
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [
+      {
+        "name": "generator-jhipster-kotlin",
+        "version": "1.6.0"
+      }
+    ],
+    "blueprints": [
+      {
+        "name": "generator-jhipster-kotlin",
+        "version": "1.6.0"
+      }
+    ]
+  },
+  "entities": ["Transaction"]
+}
