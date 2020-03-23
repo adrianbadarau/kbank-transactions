@@ -25,7 +25,7 @@
     "packageName": "com.adrianbadarau.bank.transactions",
     "packageFolder": "com/adrianbadarau/bank/transactions",
     "jhipsterVersion": "6.8.0",
-    "creationTimestamp": 1584989520824,
+    "creationTimestamp": 1584993300450,
     "clientPackageManager": "npm",
     "jwtSecretKey": "YzU0M2RmODFiNzQ0YTE4YzhlMDdkN2I3YjNmZDRjZDJlOGFiOTkwZjhmNDg2NThjYjYwYjUzYWQ4ODg4Mzg4Yjc4OWQyNTBhODhjZjY2ODVlODdmOGE0ZmY2Mjg1OTY3NDUxYTliODNiOTEzNDg5NTNkNGJiNGNhNTU5ZDMwZGQ=",
     "embeddableLaunchScript": false,
