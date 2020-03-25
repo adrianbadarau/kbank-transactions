@@ -13,17 +13,11 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 
 private const val ENTITY_NAME = "transactionsTransaction"
+
 /**
  * REST controller for managing [com.adrianbadarau.bank.transactions.domain.Transaction].
  */
@@ -34,6 +28,7 @@ class TransactionResource(
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
+
     @Value("\${jhipster.clientApp.name}")
     private var applicationName: String? = null
 
@@ -79,11 +74,12 @@ class TransactionResource(
             .headers(
                 HeaderUtil.createEntityUpdateAlert(
                     applicationName, true, ENTITY_NAME,
-                     transaction.id.toString()
+                    transaction.id.toString()
                 )
             )
             .body(result)
     }
+
     /**
      * `GET  /transactions` : get all the transactions.
      *
@@ -93,10 +89,11 @@ class TransactionResource(
      */
     @GetMapping("/transactions")
     fun getAllTransactions(
+        @RequestParam(required = false, name = "accountId") accountId: String?,
         pageable: Pageable
     ): ResponseEntity<MutableList<Transaction>> {
         log.debug("REST request to get a page of Transactions")
-        val page = transactionService.findAll(pageable)
+        val page = transactionService.findAll(pageable, accountId)
         val headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page)
         return ResponseEntity.ok().headers(headers).body(page.content)
     }
@@ -113,6 +110,7 @@ class TransactionResource(
         val transaction = transactionService.findOne(id)
         return ResponseUtil.wrapOrNotFound(transaction)
     }
+
     /**
      *  `DELETE  /transactions/:id` : delete the "id" transaction.
      *

@@ -1,4 +1,5 @@
 package com.adrianbadarau.bank.transactions.service
+
 import com.adrianbadarau.bank.transactions.domain.Transaction
 import com.adrianbadarau.bank.transactions.repository.TransactionRepository
 import java.util.Optional
@@ -37,9 +38,9 @@ class TransactionService(
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    fun findAll(pageable: Pageable): Page<Transaction> {
+    fun findAll(pageable: Pageable, accountId: String? = null): Page<Transaction> {
         log.debug("Request to get all Transactions")
-        return transactionRepository.findAll(pageable)
+        return if (accountId != null) transactionRepository.findAllByAccountIdEquals(accountId, pageable) else transactionRepository.findAll(pageable)
     }
 
     /**
