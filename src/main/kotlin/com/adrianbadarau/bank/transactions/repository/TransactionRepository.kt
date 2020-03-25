@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository
 @Suppress("unused")
 @Repository
 interface TransactionRepository : JpaRepository<Transaction, Long> {
-    fun findAllByAccountIdEquals(accountId: String, pageable: Pageable):Page<Transaction>
+    fun findAllByAccountIdEquals(accountId: String, pageable: Pageable): Page<Transaction>
 }
