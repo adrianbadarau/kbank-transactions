@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.math.BigDecimal
 
 /**
  * Service Implementation for managing [Transaction].
@@ -31,7 +32,12 @@ class TransactionService(
      */
     fun save(transaction: Transaction): Transaction {
         log.debug("Request to save Transaction : {}", transaction)
-        return transactionRepository.save(transaction)
+        val customerAccount = clientAccountsFeignClient.getCustomerAccount(transaction.accountId!!)
+        customerAccount.ballance += transaction.value!!
+        if (customerAccount.ballance < BigDecimal.ZERO) throw error("Can't make transaction resulting balance will be negative")
+        val saved = transactionRepository.save(transaction)
+        if (saved.id != null) clientAccountsFeignClient.updateAccountBalance(customerAccount) else throw error("Could not save transaction")
+        return saved
     }
 
     /**
