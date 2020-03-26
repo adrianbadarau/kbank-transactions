@@ -38,9 +38,9 @@ class TransactionService(
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    fun findAll(pageable: Pageable, accountId: String? = null): Page<Transaction> {
+    fun findAll(pageable: Pageable, accountIds: List<String>? = null): Page<Transaction> {
         log.debug("Request to get all Transactions")
-        return if (accountId != null) transactionRepository.findAllByAccountIdEquals(accountId, pageable) else transactionRepository.findAll(pageable)
+        return if (accountIds != null) transactionRepository.findAllByAccountIdIn(accountIds, pageable) else transactionRepository.findAll(pageable)
     }
 
     /**

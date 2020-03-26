@@ -89,11 +89,11 @@ class TransactionResource(
      */
     @GetMapping("/transactions")
     fun getAllTransactions(
-        @RequestParam(required = false, name = "accountId") accountId: String?,
+        @RequestParam(required = false, name = "accountId") accountsId: List<String>?,
         pageable: Pageable
     ): ResponseEntity<MutableList<Transaction>> {
         log.debug("REST request to get a page of Transactions")
-        val page = transactionService.findAll(pageable, accountId)
+        val page = transactionService.findAll(pageable, accountsId)
         val headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page)
         return ResponseEntity.ok().headers(headers).body(page.content)
     }
