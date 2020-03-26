@@ -1,10 +1,13 @@
 package com.adrianbadarau.bank.transactions.web.rest
 
+import com.adrianbadarau.bank.products.domain.ClientAccount
 import com.adrianbadarau.bank.transactions.TransactionsApp
+import com.adrianbadarau.bank.transactions.client.ClientAccountsFeignClient
 import com.adrianbadarau.bank.transactions.domain.Transaction
 import com.adrianbadarau.bank.transactions.repository.TransactionRepository
 import com.adrianbadarau.bank.transactions.service.TransactionService
 import com.adrianbadarau.bank.transactions.web.rest.errors.ExceptionTranslator
+import com.nhaarman.mockitokotlin2.given
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -17,6 +20,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.MockitoAnnotations
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
@@ -64,6 +68,9 @@ class TransactionResourceIT {
     private lateinit var restTransactionMockMvc: MockMvc
 
     private lateinit var transaction: Transaction
+
+    @MockBean
+    private lateinit var clientAccountsFeignClient: ClientAccountsFeignClient
 
     @BeforeEach
     fun setup() {
@@ -206,6 +213,8 @@ class TransactionResourceIT {
     fun getAllTransactions() {
         // Initialize the database
         transactionRepository.saveAndFlush(transaction)
+        val accounts = listOf(ClientAccount(customerID = DEFAULT_ACCOUNT_ID))
+        given(clientAccountsFeignClient.getAllClientAccounts()).willReturn(accounts)
 
         // Get all the transactionList
         restTransactionMockMvc.perform(get("/api/transactions?sort=id,desc"))
@@ -245,6 +254,7 @@ class TransactionResourceIT {
         restTransactionMockMvc.perform(get("/api/transactions/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound)
     }
+
     @Test
     @Transactional
     fun updateTransaction() {
