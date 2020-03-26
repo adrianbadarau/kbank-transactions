@@ -3,7 +3,7 @@ package com.adrianbadarau.bank.transactions.service
 import com.adrianbadarau.bank.transactions.client.ClientAccountsFeignClient
 import com.adrianbadarau.bank.transactions.domain.Transaction
 import com.adrianbadarau.bank.transactions.repository.TransactionRepository
-import com.adrianbadarau.bank.transactions.security.getCurrentUserLogin
+import java.math.BigDecimal
 import java.util.Optional
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
@@ -31,7 +31,12 @@ class TransactionService(
      */
     fun save(transaction: Transaction): Transaction {
         log.debug("Request to save Transaction : {}", transaction)
-        return transactionRepository.save(transaction)
+        val customerAccount = clientAccountsFeignClient.getCustomerAccount(transaction.accountId!!)
+        customerAccount.ballance += transaction.value!!
+        if (customerAccount.ballance < BigDecimal.ZERO) throw error("Can't make transaction resulting balance will be negative")
+        val saved = transactionRepository.save(transaction)
+        if (saved.id != null) clientAccountsFeignClient.updateAccountBalance(customerAccount) else throw error("Could not save transaction")
+        return saved
     }
 
     /**
@@ -44,7 +49,7 @@ class TransactionService(
     fun findAll(pageable: Pageable, accountIds: List<String>? = null): Page<Transaction> {
         log.debug("Request to get all Transactions")
         if (accountIds == null) {
-            val accounts = clientAccountsFeignClient.getAllClientAccounts().map { it.customerID ?: "" }
+            val accounts = clientAccountsFeignClient.getAllClientAccounts().map { it.id ?: "" }
             return transactionRepository.findAllByAccountIdIn(accountId = accounts, pageable = pageable)
         }
         return transactionRepository.findAllByAccountIdIn(accountIds, pageable)

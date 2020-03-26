@@ -1,12 +1,13 @@
 package com.adrianbadarau.bank.transactions.web.rest
 
-import com.adrianbadarau.bank.products.domain.ClientAccount
 import com.adrianbadarau.bank.transactions.TransactionsApp
 import com.adrianbadarau.bank.transactions.client.ClientAccountsFeignClient
 import com.adrianbadarau.bank.transactions.domain.Transaction
+import com.adrianbadarau.bank.transactions.products_api.ClientAccount
 import com.adrianbadarau.bank.transactions.repository.TransactionRepository
 import com.adrianbadarau.bank.transactions.service.TransactionService
 import com.adrianbadarau.bank.transactions.web.rest.errors.ExceptionTranslator
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import java.math.BigDecimal
 import java.time.Instant
@@ -17,6 +18,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.hasItem
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.ArgumentMatchers
 import org.mockito.MockitoAnnotations
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -82,6 +84,10 @@ class TransactionResourceIT {
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
             .setValidator(validator).build()
+
+        val clientAccount = ClientAccount(id = DEFAULT_ACCOUNT_ID)
+        given(clientAccountsFeignClient.getCustomerAccount(any())).willReturn(clientAccount)
+        given(clientAccountsFeignClient.updateAccountBalance(any())).willReturn(clientAccount)
     }
 
     @BeforeEach
@@ -213,7 +219,7 @@ class TransactionResourceIT {
     fun getAllTransactions() {
         // Initialize the database
         transactionRepository.saveAndFlush(transaction)
-        val accounts = listOf(ClientAccount(customerID = DEFAULT_ACCOUNT_ID))
+        val accounts = listOf(ClientAccount(id = DEFAULT_ACCOUNT_ID))
         given(clientAccountsFeignClient.getAllClientAccounts()).willReturn(accounts)
 
         // Get all the transactionList
@@ -258,6 +264,9 @@ class TransactionResourceIT {
     @Test
     @Transactional
     fun updateTransaction() {
+        val clientAccount = ClientAccount(id = UPDATED_ACCOUNT_ID)
+        given(clientAccountsFeignClient.getCustomerAccount(UPDATED_ACCOUNT_ID)).willReturn(clientAccount)
+        given(clientAccountsFeignClient.updateAccountBalance(ClientAccount(id = UPDATED_ACCOUNT_ID, ballance = DEFAULT_VALUE + UPDATED_VALUE))).willReturn(clientAccount)
         // Initialize the database
         transactionService.save(transaction)
 
