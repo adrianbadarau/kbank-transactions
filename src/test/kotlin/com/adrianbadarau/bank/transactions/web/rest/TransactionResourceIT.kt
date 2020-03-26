@@ -1,9 +1,9 @@
 package com.adrianbadarau.bank.transactions.web.rest
 
-import com.adrianbadarau.bank.products.domain.ClientAccount
 import com.adrianbadarau.bank.transactions.TransactionsApp
 import com.adrianbadarau.bank.transactions.client.ClientAccountsFeignClient
 import com.adrianbadarau.bank.transactions.domain.Transaction
+import com.adrianbadarau.bank.transactions.products_api.ClientAccount
 import com.adrianbadarau.bank.transactions.repository.TransactionRepository
 import com.adrianbadarau.bank.transactions.service.TransactionService
 import com.adrianbadarau.bank.transactions.web.rest.errors.ExceptionTranslator

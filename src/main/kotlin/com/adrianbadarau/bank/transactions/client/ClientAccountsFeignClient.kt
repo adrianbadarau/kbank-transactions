@@ -1,6 +1,6 @@
 package com.adrianbadarau.bank.transactions.client
 
-import com.adrianbadarau.bank.products.domain.ClientAccount
+import com.adrianbadarau.bank.transactions.products_api.ClientAccount
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping

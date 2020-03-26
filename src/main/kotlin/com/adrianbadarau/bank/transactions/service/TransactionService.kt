@@ -3,14 +3,13 @@ package com.adrianbadarau.bank.transactions.service
 import com.adrianbadarau.bank.transactions.client.ClientAccountsFeignClient
 import com.adrianbadarau.bank.transactions.domain.Transaction
 import com.adrianbadarau.bank.transactions.repository.TransactionRepository
-import com.adrianbadarau.bank.transactions.security.getCurrentUserLogin
+import java.math.BigDecimal
 import java.util.Optional
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.math.BigDecimal
 
 /**
  * Service Implementation for managing [Transaction].
