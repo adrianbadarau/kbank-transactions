@@ -1,7 +1,9 @@
 package com.adrianbadarau.bank.transactions.service
 
+import com.adrianbadarau.bank.transactions.client.ClientAccountsFeignClient
 import com.adrianbadarau.bank.transactions.domain.Transaction
 import com.adrianbadarau.bank.transactions.repository.TransactionRepository
+import com.adrianbadarau.bank.transactions.security.getCurrentUserLogin
 import java.util.Optional
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
@@ -15,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 class TransactionService(
-    private val transactionRepository: TransactionRepository
+    private val transactionRepository: TransactionRepository,
+    private val clientAccountsFeignClient: ClientAccountsFeignClient
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -32,15 +35,19 @@ class TransactionService(
     }
 
     /**
-     * Get all the transactions.
+     * Get all the transactions for the current logged in user.
      *
      * @param pageable the pagination information.
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    fun findAll(pageable: Pageable, accountId: String? = null): Page<Transaction> {
+    fun findAll(pageable: Pageable, accountIds: List<String>? = null): Page<Transaction> {
         log.debug("Request to get all Transactions")
-        return if (accountId != null) transactionRepository.findAllByAccountIdEquals(accountId, pageable) else transactionRepository.findAll(pageable)
+        if (accountIds == null) {
+            val accounts = clientAccountsFeignClient.getAllClientAccounts().map { it.customerID ?: "" }
+            return transactionRepository.findAllByAccountIdIn(accountId = accounts, pageable = pageable)
+        }
+        return transactionRepository.findAllByAccountIdIn(accountIds, pageable)
     }
 
     /**

@@ -13,4 +13,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface TransactionRepository : JpaRepository<Transaction, Long> {
     fun findAllByAccountIdEquals(accountId: String, pageable: Pageable): Page<Transaction>
+    fun findAllByAccountIdIn(accountId: List<String>, pageable: Pageable): Page<Transaction>
 }
