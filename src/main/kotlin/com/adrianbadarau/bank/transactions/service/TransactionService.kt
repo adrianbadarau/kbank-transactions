@@ -44,7 +44,7 @@ class TransactionService(
     fun findAll(pageable: Pageable, accountIds: List<String>? = null): Page<Transaction> {
         log.debug("Request to get all Transactions")
         if (accountIds == null) {
-            val accounts = clientAccountsFeignClient.getAllClientAccounts().map { it.customerID ?: "" }
+            val accounts = clientAccountsFeignClient.getAllClientAccounts().map { it.id ?: "" }
             return transactionRepository.findAllByAccountIdIn(accountId = accounts, pageable = pageable)
         }
         return transactionRepository.findAllByAccountIdIn(accountIds, pageable)

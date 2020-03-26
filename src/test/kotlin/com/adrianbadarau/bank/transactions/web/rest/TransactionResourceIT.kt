@@ -213,7 +213,7 @@ class TransactionResourceIT {
     fun getAllTransactions() {
         // Initialize the database
         transactionRepository.saveAndFlush(transaction)
-        val accounts = listOf(ClientAccount(customerID = DEFAULT_ACCOUNT_ID))
+        val accounts = listOf(ClientAccount(id = DEFAULT_ACCOUNT_ID))
         given(clientAccountsFeignClient.getAllClientAccounts()).willReturn(accounts)
 
         // Get all the transactionList
