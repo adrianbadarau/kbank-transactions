@@ -28,7 +28,7 @@ class TransactionValidationService {
         val invalidTransactions = readCsv(csv).filter { isInvalidTransaction(it, transactionReferences) }
         if (invalidTransactions.isNotEmpty()) {
             validationResponse.failedItems = invalidTransactions
-            validationResponse.success = true
+            validationResponse.success = false
         }
         return validationResponse
     }
