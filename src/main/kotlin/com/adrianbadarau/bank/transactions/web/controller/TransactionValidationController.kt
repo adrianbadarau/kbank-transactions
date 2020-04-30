@@ -16,5 +16,4 @@ class TransactionValidationController(private val transactionValidationService: 
     fun validateTransactions(@RequestBody file: MultipartFile): ResponseEntity<ValidationResponse> {
         return ResponseEntity.ok(transactionValidationService.validateTransactionUpload(file))
     }
-
 }

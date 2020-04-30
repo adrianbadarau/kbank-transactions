@@ -5,12 +5,12 @@ import com.adrianbadarau.bank.transactions.domain.TransactionDTO
 import com.adrianbadarau.bank.transactions.domain.ValidationResponse
 import com.adrianbadarau.bank.transactions.utils.CsvTransactionMapper
 import com.opencsv.bean.CsvToBeanBuilder
-import org.springframework.stereotype.Service
-import org.springframework.web.multipart.MultipartFile
 import java.io.InputStreamReader
 import java.math.BigDecimal
 import java.util.*
 import java.util.stream.Collectors
+import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 
 /**
  * Validation service for transactions, will check if there are any transactions in the CSV file that have duplicate
